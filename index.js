@@ -13,64 +13,57 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
-var inversify_1 = require("inversify");
+const inversify_1 = require("inversify");
 // 2. Declare types
-var TYPES = {
+const TYPES = {
     Warrior: Symbol("Warrior"),
     Weapon: Symbol("Weapon"),
     ThrowableWeapon: Symbol("ThrowableWeapon")
 };
 // 3. Declare classes
-var Katana = /** @class */ (function () {
-    function Katana() {
-    }
-    Katana.prototype.hit = function () {
+let Katana = class Katana {
+    hit() {
         return "cut!";
-    };
-    Katana = __decorate([
-        inversify_1.injectable()
-    ], Katana);
-    return Katana;
-}());
-var Shuriken = /** @class */ (function () {
-    function Shuriken() {
     }
-    Shuriken.prototype.throw = function () {
+};
+Katana = __decorate([
+    inversify_1.injectable()
+], Katana);
+let Shuriken = class Shuriken {
+    throw() {
         return "hit!";
-    };
-    Shuriken = __decorate([
-        inversify_1.injectable()
-    ], Shuriken);
-    return Shuriken;
-}());
-var Ninja = /** @class */ (function () {
-    function Ninja(katana, shuriken) {
+    }
+};
+Shuriken = __decorate([
+    inversify_1.injectable()
+], Shuriken);
+let Ninja = class Ninja {
+    constructor(katana, shuriken) {
         this.katana = katana;
         this.shuriken = shuriken;
     }
-    Ninja.prototype.fight = function () {
+    fight() {
         return this.katana.hit();
-    };
+    }
     ;
-    Ninja.prototype.sneak = function () {
+    sneak() {
         return this.shuriken.throw();
-    };
+    }
     ;
-    Ninja = __decorate([
-        inversify_1.injectable(),
-        __param(0, inversify_1.inject(TYPES.Weapon)),
-        __param(1, inversify_1.inject(TYPES.ThrowableWeapon)),
-        __metadata("design:paramtypes", [Object, Object])
-    ], Ninja);
-    return Ninja;
-}());
+};
+Ninja = __decorate([
+    inversify_1.injectable(),
+    __param(0, inversify_1.inject(TYPES.Weapon)),
+    __param(1, inversify_1.inject(TYPES.ThrowableWeapon)),
+    __metadata("design:paramtypes", [Object, Object])
+], Ninja);
 // 4. Create instance of Container & declare type bindings
-var myContainer = new inversify_1.Container();
+const myContainer = new inversify_1.Container();
 myContainer.bind(TYPES.Warrior).to(Ninja);
 myContainer.bind(TYPES.Weapon).to(Katana);
 myContainer.bind(TYPES.ThrowableWeapon).to(Shuriken);
 // 5. Resolve Warrior type
-var ninja = myContainer.get(TYPES.Warrior);
+const ninja = myContainer.get(TYPES.Warrior);
 // 6. Check “Katana” and “Shuriken” has been injected into “Ninja”
 console.log(ninja.fight()); // "cut!"
 console.log(ninja.sneak()); // "hit!"
